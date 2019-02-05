@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", setupPage)
 let dogBar = document.querySelector('#dog-bar')
 let dogContainer = document.querySelector('#dog-info')
+let filterButton = document.querySelector('#good-dog-filter')
+filterButton.addEventListener("click", filterHandler)
 
 function setupPage() {
   renderAllDogs()
@@ -10,7 +12,7 @@ function renderAllDogs() {
     dogBar.innerHTML = ""
     let url = `http://localhost:3000/pups`;
     getDog(url).then(function (data) {
-        data.forEach(dogSpan)
+        data.forEach(renderDogSpan)
     })
 }  
 
@@ -18,12 +20,17 @@ function getDog(url) {
     return fetch(url).then(res => res.json())
 }  
 
+function renderDogSpan(dog) {
+    let element = dogSpan(dog)
+    dogBar.appendChild(element)
+}
+
 function dogSpan(dog) {
     let element = document.createElement('span')
     element.textContent = dog.name 
     element.dataset.id = dog.id
     element.addEventListener("click", renderDogInfo)
-    dogBar.appendChild(element)
+    return element
 } 
 
 function renderDogInfo() {
@@ -79,4 +86,24 @@ function updateStatus(id, update) {
         isGoodDog: update
       })
     })     
+}  
+
+function filterHandler() {
+    let title = event.target.textContent
+   
+    if (title == "Filter good dogs: OFF") {
+        event.target.textContent = "Filter good dogs: ON"
+        filterDogs()
+    } else {
+        event.target.textContent = "Filter good dogs: OFF"
+        renderAllDogs()
+    }
+} 
+
+function filterDogs() {
+    dogBar.innerHTML = ""
+    let url = `http://localhost:3000/pups`;
+    getDog(url).then(function (data) {
+        data.filter(dog => dog.isGoodDog == true).forEach(renderDogSpan)
+    }) 
 }
