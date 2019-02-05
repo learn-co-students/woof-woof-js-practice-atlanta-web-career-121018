@@ -12,7 +12,7 @@ function renderAllDogs() {
     dogBar.innerHTML = ""
     let url = `http://localhost:3000/pups`;
     getDog(url).then(function (data) {
-        data.forEach(renderDogSpan)
+        data.forEach(dogSpan)
     })
 }  
 
@@ -20,17 +20,12 @@ function getDog(url) {
     return fetch(url).then(res => res.json())
 }  
 
-function renderDogSpan(dog) {
-    let element = dogSpan(dog)
-    dogBar.appendChild(element)
-}
-
 function dogSpan(dog) {
     let element = document.createElement('span')
     element.textContent = dog.name 
     element.dataset.id = dog.id
     element.addEventListener("click", renderDogInfo)
-    return element
+    dogBar.appendChild(element)
 } 
 
 function renderDogInfo() {
@@ -104,6 +99,6 @@ function filterDogs() {
     dogBar.innerHTML = ""
     let url = `http://localhost:3000/pups`;
     getDog(url).then(function (data) {
-        data.filter(dog => dog.isGoodDog == true).forEach(renderDogSpan)
+        data.filter(dog => dog.isGoodDog == true).forEach(dogSpan)
     }) 
 }
