@@ -8,6 +8,8 @@ function setupPage() {
     filter = !filter
       if (filter) {
         filterBtn.innerText = 'Filter good dogs: ON'
+      } else {
+        filterBtn.innerText = 'Filter good dogs: OFF'
       }
     badDogErasure()
   })
@@ -61,6 +63,7 @@ function dogView(dog) {
     // dogView(dog)
     // whoops
     //send new info to db
+    badDogErasure()
   })
   dogInfo.appendChild(dogPic)
   dogInfo.appendChild(doggo)
@@ -96,5 +99,11 @@ function badDogErasure() {
     })
   } else {
     renderAllDogs()
+  }
+  const filterBtn = document.querySelector('#good-dog-filter')
+  if (filter) {
+    filterBtn.innerText = 'Filter good dogs: ON'
+  } else {
+    filterBtn.innerText = 'Filter good dogs: OFF'
   }
 }
