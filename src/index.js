@@ -11,8 +11,11 @@ function setupPage() {
 function renderAllDogs() {
     dogBar.innerHTML = ""
     let url = `http://localhost:3000/pups`;
-    getDog(url).then(function (data) {
-        data.forEach(dogSpan)
+
+		fetch(url)
+		.then(res => res.json())
+		.then(res => {
+        res.forEach(dogSpan)
     })
 }
 
@@ -24,13 +27,13 @@ function dogSpan(dog) {
     let element = document.createElement('span')
     element.textContent = dog.name
     element.dataset.id = dog.id
-    element.addEventListener("click", renderDogInfo)
+    element.addEventListener("click", () => renderDogInfo(dog))
     dogBar.appendChild(element)
 }
 
-function renderDogInfo() {
+function renderDogInfo(dog) {
     dogContainer.innerHTML = ""
-    let id = parseInt(event.target.dataset.id)
+    let id = dog.id
     let url = `http://localhost:3000/pups/${id}`;
     getDog(url).then(dogInfo)
 }
@@ -51,14 +54,14 @@ function dogInfo(dog) {
     } else {
         dogStatus.textContent = "Bad doggo!"
     }
-    dogStatus.addEventListener("click", changeStatus)
+    dogStatus.addEventListener("click", () => changeStatus(dog))
     dogContainer.appendChild(dogStatus)
 }
 
-function changeStatus() {
+function changeStatus(dog) {
     let status = event.target.textContent
     let update = true
-    let id  = event.target.dataset.id
+    let id  = dog.id
     if (status == "Good doggo!") {
         event.target.textContent = "Bad doggo!"
         update = false
